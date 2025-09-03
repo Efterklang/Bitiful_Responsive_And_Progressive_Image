@@ -17,13 +17,13 @@
 > <img src="assets/README/1756906220972.png" width="400">
 
 progressive_image 会请求 bitiful server，拿到 thumbhash base64 text，多次运行可能会浪费请求次数，bitiful 计费参考[计费概述 - 缤纷云文档](https://docs.bitiful.com/prices/basic#%E5%85%8D%E8%B4%B9%E9%A2%9D%E5%BA%A6)
-因此本地测试环境设置不启用；如需开启，设置`$env.CI_BITIFUL = true`，CI/CD Pipeline 同理；
+因此本地测试环境设置不启用；如需开启，设置`$env.CI = true`，CI/CD Pipeline 同理；
 
 ```js
 if (
   !hexo.config.bitiful_toolkit ||
   !hexo.config.bitiful_toolkit.enable ||
-  process.env.CI_BITIFUL !== "true"
+  process.env.CI !== "true"
 ) {
   //
   log.info("[bitiful_toolkit] Skip Image Processing...");

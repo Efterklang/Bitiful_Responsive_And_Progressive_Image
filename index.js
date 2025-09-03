@@ -4,8 +4,8 @@ const { join } = require("path");
 
 const log = hexo.log;
 
-if (!hexo.config.bitiful_toolkit || !hexo.config.bitiful_toolkit.enable || process.env.CI_BITIFUL !== 'true') {
-    // 本地测试环境不启用，省点米；在cicd pipeline里设置env.CI_BITIFUL = true的话才执行
+if (!hexo.config.bitiful_toolkit || !hexo.config.bitiful_toolkit.enable || process.env.CI !== 'true') {
+    // 本地测试环境不启用，省点米；在cicd pipeline里设置env.CI = true的话才执行
     log.info("[bitiful_toolkit] Skip Image Processing...");
     return;
 }
