@@ -2,7 +2,7 @@
 
 ## Intro
 
-> [!INFO]
+> [!NOTE]
 >
 > A very compact representation of an image placeholder. Store it inline with your data and show it while the real image is loading for a smoother loading experience. It's similar to BlurHash but with the following advantages:
 >
@@ -14,7 +14,7 @@
 >
 > The code for this is available at https://github.com/evanw/thumbhash and contains implementations for JavaScript, Rust, Swift, and Java. You can use npm install thumbhash to install the JavaScript package and cargo add thumbhash to install the Rust package.
 >
-> <img src="assets/README/1756906220972.png" width="400">
+> <img width="1760" height="640" alt="1756906220972" src="https://github.com/user-attachments/assets/74f6a198-9ed7-4374-9522-c2efc7fac852" />
 
 progressive_image 会请求 bitiful server，拿到 thumbhash base64 text，多次运行可能会浪费请求次数，bitiful 计费参考[计费概述 - 缤纷云文档](https://docs.bitiful.com/prices/basic#%E5%85%8D%E8%B4%B9%E9%A2%9D%E5%BA%A6)
 因此本地测试环境设置不启用；如需开启，设置`$env.CI = true`，CI/CD Pipeline 同理；
@@ -33,7 +33,7 @@ if (
 
 本次测试时，可以直接运行`bun run test`，在浏览器打开`/test/output/index.html`查看效果。效果如图所示
 
-<video controls src="assets/README/README.mov" title="Title"></video>
+[README.webm](https://github.com/user-attachments/assets/90dc98bd-37e0-4f44-b761-1772bcd63343)
 
 ## Setup
 
