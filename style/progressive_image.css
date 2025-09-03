@@ -1,7 +1,6 @@
 /* Progressive Image Loading Styles */
 .progressive_img_container {
     position: relative;
-    display: inline-block;
     width: auto;
     height: auto;
 }
@@ -30,5 +29,7 @@
 }
 
 .progressive_img_container>img:first-child.loaded+.thumbhash-placeholder {
-    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+    visibility: hidden;
 }

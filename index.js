@@ -27,16 +27,17 @@ if (hexo.config.bitiful_toolkit.inject_css) {
 if (hexo.config.bitiful_toolkit.all) {
     log.info("[bitiful_toolkit] process all image");
     hexo.extend.filter.register(
-        "after_render:html", function (html) {
-            html = main(html, hexo.config.bitiful_toolkit);
+        "after_render:html",async function (html) {
+            log.info("html: ", html);
+            html = await main(html, hexo.config.bitiful_toolkit);
             return html;
         }, 15
     );
 } else {
     log.info("[bitiful_toolkit] process post images");
     hexo.extend.filter.register(
-        "after_post_render", function (data) {
-            data.content = main(data.content, hexo.config.bitiful_toolkit);
+        "before_post_render", async function (data) {
+            data.content = await main(data.content, hexo.config.bitiful_toolkit);
             return data;
         }, 15
     );
