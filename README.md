@@ -35,13 +35,25 @@ if (
 
 [README.webm](https://github.com/user-attachments/assets/90dc98bd-37e0-4f44-b761-1772bcd63343)
 
+## TODO-List
+
+- [x] config.yaml 中 bitiful_toolkit 新增 env_name 选项，可自定义环境变量名
+- [ ] 缓存 thumbhash 到本地文件，请求 img url 对应的 data-url 后将其存储到本地，避免浪费 bitiful 请求次数/流量
+
+```plain
+before: img_url -> fetch thumbhash base64 -> convert to data-url
+after: img_url -> check local cache -> if exist then use it
+                                    ->  else fetch thumbhash base64 -> convert to data-url -> store to local cache
+```
+
 ## Setup
 
 `$bun add git+https://github.com/Efterklang/Bitiful_Responsive_And_Progressive_Image`
 
-```yaml
+```yaml config.yaml
 bitiful_toolkit:
   enable: true
+  env_name: "CI" # 如果存在环境变量CI的值为true，才进行图片处理
   all: false
   srcset_widths: [200, 400, 600, 800, 1200, 2000, 3000]
   add_max_width: false

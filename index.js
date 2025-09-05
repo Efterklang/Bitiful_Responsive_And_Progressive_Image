@@ -4,8 +4,11 @@ const { join } = require("path");
 
 const log = hexo.log;
 
-if (!hexo.config.bitiful_toolkit || !hexo.config.bitiful_toolkit.enable || process.env.CI !== 'true') {
-    // 本地测试环境不启用，省点米；在cicd pipeline里设置env.CI = true的话才执行
+// 获取环境变量名，默认为 'CI'
+const envName = hexo.config.bitiful_toolkit?.env_name || 'CI';
+
+if (!hexo.config.bitiful_toolkit || !hexo.config.bitiful_toolkit.enable || process.env[envName] !== 'true') {
+    // 本地测试环境不启用，省点米；在cicd pipeline里设置对应环境变量为 true 的话才执行
     log.info("[bitiful_toolkit] Skip Image Processing...");
     return;
 }
@@ -27,7 +30,7 @@ if (hexo.config.bitiful_toolkit.inject_css) {
 if (hexo.config.bitiful_toolkit.all) {
     log.info("[bitiful_toolkit] process all image");
     hexo.extend.filter.register(
-        "after_render:html",async function (html) {
+        "after_render:html", async function (html) {
             log.info("html: ", html);
             html = await main(html, hexo.config.bitiful_toolkit);
             return html;
