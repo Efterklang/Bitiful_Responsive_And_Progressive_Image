@@ -6,7 +6,12 @@
     "lib"
   ],
   "scripts": {
-    "test": "node test/test_replace.js"
+    "test": "node test/test_replace.js",
+    "test-cache": "node test/test_cache.js",
+    "test-gist": "node test/test_gist.js"
   },
-  "keywords": [ "hexo" ]
+  "keywords": [ "hexo" ],
+  "dependencies": {
+    "@octokit/core": "^6.1.2"
+  }
 }
