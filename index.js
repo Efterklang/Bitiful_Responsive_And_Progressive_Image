@@ -27,6 +27,9 @@ if (hexo.config.bitiful_toolkit.cache && hexo.config.bitiful_toolkit.cache.enabl
     hexo.extend.filter.register('before_generate', async function () {
         log.info("[BITIFUL] Initializing thumbhash cache...");
 
+        // 重置统计信息
+        cacheInstance.resetStats();
+
         // 从本地文件加载缓存
         cacheInstance.loadCacheFromFile();
 
@@ -38,7 +41,14 @@ if (hexo.config.bitiful_toolkit.cache && hexo.config.bitiful_toolkit.cache.enabl
     hexo.extend.filter.register('after_generate', async function () {
         if (cacheInstance) {
             const stats = cacheInstance.getStats();
-            log.info(`[BITIFUL] Processing complete, cache has ${stats.totalItems} items`);
+
+            // 输出详细的统计信息
+            log.info(`[BITIFUL] 图片处理完成统计:`);
+            log.info(`[BITIFUL] - 总请求数: ${stats.totalRequests}`);
+            log.info(`[BITIFUL] - 实际API请求数: ${stats.apiRequests}`);
+            log.info(`[BITIFUL] - 缓存命中数: ${stats.cacheHits}`);
+            log.info(`[BITIFUL] - 缓存命中率: ${stats.cacheHitRate}%`);
+            log.info(`[BITIFUL] - 缓存总条目数: ${stats.totalItems}`);
 
             // 如果有更新，保存到本地文件
             if (stats.isDirty) {
