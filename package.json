@@ -7,11 +7,7 @@
   ],
   "scripts": {
     "test": "node test/test_replace.js",
-    "test-cache": "node test/test_cache.js",
-    "test-gist": "node test/test_gist.js"
+    "test-cache": "node test/test_local_cache.js"
   },
-  "keywords": [ "hexo" ],
-  "dependencies": {
-    "@octokit/core": "^6.1.2"
-  }
+  "keywords": [ "hexo" ]
 }

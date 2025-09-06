@@ -26,7 +26,7 @@ if (
   process.env.CI !== "true"
 ) {
   //
-  log.info("[bitiful_toolkit] Skip Image Processing...");
+  log.info("[BITIFUL] Skip Image Processing...");
   return;
 }
 ```
@@ -38,12 +38,12 @@ if (
 ## TODO-List
 
 - [x] config.yaml 中 bitiful_toolkit 新增 env_name 选项，可自定义环境变量名
-- [x] 缓存 img_url: data-url 键值对到 github gist(`thumbhash_kv.json`)
-  - 每次 cicd build 前，将 github gist 下载到本地指定位置。
+- [x] 缓存 img_url: data-url 键值对到本地文件(`.thumbcache.json`)
+  - 每次 build 前，从 hexo 根目录加载缓存文件到内存。
   - 在获取 img url 对应的 data-url 前，先检查本地缓存是否存在 img_url 对应的 data-url
     - 如果存在，直接使用 data-url
     - 否则，请求 bitiful 服务获取 thumbhash base64 text，并转换为 data-url 后存储到本地缓存
-  - build 完成后，对应的本地缓存文件上传到 github gist，供下次使用
+  - build 完成后，将更新的缓存文件保存到 hexo 根目录，供下次使用
 
 ## Setup
 
@@ -64,42 +64,19 @@ bitiful_toolkit:
   inject_css: true
   cache:
     enable: true
-    gist_id: "your-gist-id"
-    github_token: "${GITHUB_TOKEN}" # 从环境变量读取
-    cache_file: "thumbhash_cache.json"
+    cache_file: ".thumbcache.json" # 缓存文件名，存储在hexo根目录
+    cache_key: "img_src" # 缓存键名选择，可选: "img_src" 或 "img_filename"
 ```
 
 ### 缓存功能说明
 
-新增的缓存功能可以将图片 URL 到 data-url 的映射关系缓存到 GitHub Gist，避免重复请求 Bitiful 服务：
+新增的缓存功能可以将图片 URL 到 data-url 的映射关系缓存到本地文件，避免重复请求 Bitiful 服务：
 
-1. **缓存配置**：
-
-   - `cache.enable`: 是否启用缓存功能
-   - `cache.gist_id`: GitHub Gist 的 ID，用于存储缓存文件
-   - `cache.github_token`: GitHub 访问令牌，建议通过环境变量`GITHUB_TOKEN`设置
-   - `cache.cache_file`: 缓存文件名，默认为`thumbhash_cache.json`
-
-2. **工作流程**：
-
-   - 构建开始前：自动从 GitHub Gist 下载缓存文件
-   - 图片处理时：优先检查缓存，命中则直接使用，未命中才请求 Bitiful API
-   - 构建结束后：将更新的缓存文件上传到 GitHub Gist
-
-3. **环境变量设置**：
-
-   ```bash
-   export GITHUB_TOKEN="your-github-personal-access-token"
-   ```
-
-4. **创建 GitHub Gist**：
-   - 访问 https://gist.github.com
-   - 创建一个新的 Gist，文件名为 `thumbhash_cache.json`
-   - 初始内容可以是空的 JSON 对象：`{}`
-   - 复制 Gist ID（URL 中的字符串）到配置文件
+- 构建开始前：自动从 hexo 根目录加载缓存文件
+- 图片处理时：优先检查缓存，命中则直接使用，未命中才请求 Bitiful API
+- 构建结束后：将更新的缓存文件保存到 hexo 根目录
 
 ## Ref
 
 - [ThumbHash: A very compact representation of an image placeholder](https://evanw.github.io/thumbhash/)
 - [图像 BlurHash 与 ThumbHash 哈希占位技术： - 缤纷云文档](https://docs.bitiful.com/bitiful-s4/features/hash-placeholder)
-- [REST API endpoints for gists - GitHub Docs](https://docs.github.com/en/rest/gists/gists)
