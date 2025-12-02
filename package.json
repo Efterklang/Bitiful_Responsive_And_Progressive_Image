@@ -1,7 +1,7 @@
 {
   "name": "hexo-bitiful-toolkit",
   "main": "index.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "files": [
     "index.js",
     "lib"
@@ -10,5 +10,5 @@
     "test": "node test/test_replace.js",
     "test-cache": "node test/test_local_cache.js"
   },
-  "keywords": [ "hexo" ]
+  "keywords": ["hexo"]
 }
