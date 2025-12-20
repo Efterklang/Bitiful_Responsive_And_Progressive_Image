@@ -1,29 +1,22 @@
 const main = require("./lib/replace");
 const ThumbhashCache = require("./lib/cache");
-const { readFileSync } = require("fs");
-const { join } = require("path");
 
 const log = hexo.log;
 
 // 获取环境变量名，默认为 'CI'
 const envName = hexo.config.bitiful_toolkit?.env_name || "CI";
 
-if (
-  !hexo.config.bitiful_toolkit ||
-  !hexo.config.bitiful_toolkit.enable ||
-  process.env[envName] !== "true"
-) {
-  // 本地测试环境不启用
-  return;
-}
+function entry() {
+  if (
+    !hexo.config.bitiful_toolkit ||
+    !hexo.config.bitiful_toolkit.enable ||
+    process.env[envName] !== "true"
+  ) {
+    return;
+  }
 
-// 初始化缓存实例
-let cacheInstance = null;
-if (
-  hexo.config.bitiful_toolkit.cache &&
-  hexo.config.bitiful_toolkit.cache.enable
-) {
-  cacheInstance = new ThumbhashCache({
+  // 初始化缓存实例
+  const cacheInstance = new ThumbhashCache({
     ...hexo.config.bitiful_toolkit.cache,
     hexo_root: hexo.base_dir, // 使用hexo的根目录
   });
@@ -32,10 +25,10 @@ if (
   // 在生成开始前加载缓存，优先级设置为8，确保在大多数操作之前执行
   hexo.extend.filter.register(
     "before_generate",
-    async function () {
+    async () => {
       log.info("[BITIFUL] Initializing thumbhash cache...");
       // 从本地文件加载缓存
-      cacheInstance.loadCacheFromFile();
+      await cacheInstance.loadCacheFromFile();
 
       const stats = cacheInstance.getStats();
       log.info(`[BITIFUL] Cache initialized with ${stats.totalItems} items`);
@@ -44,7 +37,7 @@ if (
   );
 
   // 在生成结束后保存缓存
-  hexo.extend.filter.register("after_generate", async function () {
+  hexo.extend.filter.register("after_generate", async () => {
     if (cacheInstance) {
       const stats = cacheInstance.getStats();
 
@@ -65,48 +58,27 @@ if (
       }
     }
   });
-}
 
-if (hexo.config.bitiful_toolkit.inject_css) {
-  // 将style/progressive_image注入到head
-  hexo.extend.generator.register("bitiful_assets", () => {
-    const progressiveCSS = readFileSync(
-      join(__dirname, "style/progressive_image.css"),
-      "utf-8",
-    );
-    return [
-      {
-        path: "css/progressive_image.css",
-        data: () => progressiveCSS,
+  if (hexo.config.bitiful_toolkit.all) {
+    log.info("[BITIFUL] process all image");
+    hexo.extend.filter.register(
+      "after_render:html",
+      async (html) => {
+        html = await main(html, hexo.config.bitiful_toolkit);
+        return html;
       },
-    ];
-  });
-  hexo.extend.injector.register(
-    "head_end",
-    () =>
-      `<link rel="stylesheet" href="${hexo.config.root}css/progressive_image.css">`,
-  );
+      15,
+    );
+  } else {
+    log.info("[BITIFUL] process post images");
+    hexo.extend.filter.register(
+      "before_post_render",
+      async (data) => {
+        data.content = await main(data.content, hexo.config.bitiful_toolkit);
+        return data;
+      },
+      15,
+    );
+  }
 }
-
-if (hexo.config.bitiful_toolkit.all) {
-  log.info("[BITIFUL] process all image");
-  hexo.extend.filter.register(
-    "after_render:html",
-    async function (html) {
-      log.info("html: ", html);
-      html = await main(html, hexo.config.bitiful_toolkit);
-      return html;
-    },
-    15,
-  );
-} else {
-  log.info("[BITIFUL] process post images");
-  hexo.extend.filter.register(
-    "before_post_render",
-    async function (data) {
-      data.content = await main(data.content, hexo.config.bitiful_toolkit);
-      return data;
-    },
-    15,
-  );
-}
+entry();
