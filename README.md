@@ -58,7 +58,6 @@ bitiful_toolkit:
   add_max_width: false
   max_widths: "(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 800px"
   enable_lazy_loading: true
-  lazy_skip_first: 2
   supported_domains: ["assets.vluv.space", "s3.bitiful.net", "bitiful.com"]
   exclude_formats: ['svg', 'gif'],
   inject_css: true
