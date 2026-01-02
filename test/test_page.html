@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -22,6 +21,41 @@
 
         <p>这是第四张图片（需要懒加载）：</p>
         <img src="https://demo.bitiful.com/girl.jpeg" alt="Image 4">
+        <p>嵌套的img</p>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <!-- Column 1-->
+            <div style="flex: 1;">
+                <img src="https://demo.bitiful.com/girl.jpeg" alt="Image 4">
+            </div>
+            <!-- Column 2-->
+            <div style="flex: 1;">
+                <img src="https://demo.bitiful.com/girl.jpeg" alt="Image 4">
+            </div>
+            <div style="flex: 1;">
+                <img src="https://demo.bitiful.com/girl.jpeg" alt="Image 4">
+            </div>
+        </div>
+        <div class="callout" data-callout="tips">
+            <div class="callout-title">
+                <div class="callout-title-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-pencil">
+                        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path>
+                        <path d="m15 5 4 4"></path>
+                    </svg>
+                </div>
+                <div class="callout-title-inner">Developer Tools</div>
+            </div>
+            <div class="callout-content">
+                <p></p>
+                <p>VSCode作为Electron应用，内置了Chromium的DevTools，对调试css很有帮助; 可通过在Command
+                    Palette运行<code>Developer: Toggle Developer Tools</code>命令打开</p>
+                <img src="https://assets.vluv.space/vsc_dev_tools.avif" width="75%" alt="vsc_dev_tools"
+                    class="medium-zoom-image">
+            </div>
+        </div>
     </div>
 </body>
 
